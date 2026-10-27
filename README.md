@@ -1,4 +1,4 @@
-# Vitrine
+# INF-LINK
 
 A link-in-bio storefront for creators and coaches. Sell digital downloads, paid 1:1 coaching calls, online courses, memberships and email lead magnets from one mobile page.
 
@@ -22,7 +22,7 @@ npm run dev
 Open http://localhost:3000. On first run a demo account is seeded with sample products and 30 days of activity:
 
 - Store: http://localhost:3000/demo
-- Login: `demo@vitrine.app` / `demo1234`
+- Login: `demo@inf.link` / `demo1234`
 
 ## Project structure
 

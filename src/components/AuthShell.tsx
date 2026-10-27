@@ -18,7 +18,7 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
         <div className="relative max-w-md">
           <p className="font-display text-3xl font-semibold leading-tight tracking-tight">Everything you sell, behind one link.</p>
           <ul className="mt-8 space-y-3 text-neutral-300">
-            {["Digital downloads delivered automatically", "Paid 1:1 calls booked straight into your calendar", "Courses, memberships and lead magnets", "0% Vitrine transaction fees"].map((t) => (
+            {["Digital downloads delivered automatically", "Paid 1:1 calls booked straight into your calendar", "Courses, memberships and lead magnets", "0% INF-LINK transaction fees"].map((t) => (
               <li key={t} className="flex items-center gap-3">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/10"><Check size={14} /></span>
                 {t}

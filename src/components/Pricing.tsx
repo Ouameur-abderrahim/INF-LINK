@@ -9,7 +9,7 @@ const PLANS = [
     name: "Creator",
     monthly: 19,
     blurb: "Everything you need to start selling from your bio.",
-    items: ["Unlimited products", "1:1 coaching bookings", "Digital downloads", "Email lead magnets", "Store analytics", "0% Vitrine transaction fees"],
+    items: ["Unlimited products", "1:1 coaching bookings", "Digital downloads", "Email lead magnets", "Store analytics", "0% INF-LINK transaction fees"],
   },
   {
     name: "Creator Pro",

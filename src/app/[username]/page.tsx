@@ -14,7 +14,7 @@ async function load(username: string) {
 export async function generateMetadata({ params }: { params: Promise<{ username: string }> }): Promise<Metadata> {
   const data = await load((await params).username);
   if (!data) return {};
-  return { title: `${data.user.name} | Vitrine`, description: data.user.bio };
+  return { title: `${data.user.name} | INF-LINK`, description: data.user.bio };
 }
 
 export default async function PublicStore({ params }: { params: Promise<{ username: string }> }) {

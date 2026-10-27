@@ -17,7 +17,7 @@ export function AuthForm({ mode, defaultUsername = "" }: { mode: "login" | "sign
           <div>
             <label className="label" htmlFor="username">Your store link</label>
             <div className="flex items-center rounded-lg border border-line focus-within:border-brand-500 focus-within:ring-4 focus-within:ring-brand-100">
-              <span className="pl-3.5 text-sm text-neutral-500">vitrine.app/</span>
+              <span className="pl-3.5 text-sm text-neutral-500">inf.link/</span>
               <input id="username" name="username" defaultValue={defaultUsername} className="w-full bg-transparent px-1 py-2.5 text-sm outline-none" required />
             </div>
           </div>

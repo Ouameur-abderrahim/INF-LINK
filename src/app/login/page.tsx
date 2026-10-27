@@ -6,7 +6,7 @@ import { getCurrentUser } from "@/lib/auth";
 export default async function LoginPage() {
   if (await getCurrentUser()) redirect("/dashboard");
   return (
-    <AuthShell title="Welcome back" subtitle="Demo account: demo@vitrine.app / demo1234">
+    <AuthShell title="Welcome back" subtitle="Demo account: demo@inf.link / demo1234">
       <AuthForm mode="login" />
     </AuthShell>
   );

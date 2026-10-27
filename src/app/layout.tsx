@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vitrine — Your creator store in one link",
+  title: "INF-LINK — Your creator store in one link",
   description: "Sell digital products, coaching calls, courses and memberships right from your link in bio.",
 };
 

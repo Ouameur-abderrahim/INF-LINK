@@ -29,9 +29,9 @@ import { THEMES } from "@/lib/themes";
 import { PRODUCT_TYPES, type ProductType } from "@/lib/types";
 
 const FAQ = [
-  { q: "Do I need a website?", a: "No. Your Vitrine page is your website. Paste the link in your Instagram, TikTok or YouTube bio and start selling the same day." },
+  { q: "Do I need a website?", a: "No. Your INF-LINK page is your website. Paste the link in your Instagram, TikTok or YouTube bio and start selling the same day." },
   { q: "How do I get paid?", a: "Buyers pay at checkout and the order lands in your dashboard instantly. This build runs payments in test mode; connect Stripe to accept real cards." },
-  { q: "Does Vitrine take a cut of my sales?", a: "No. Vitrine charges 0% transaction fees on every plan. Your payment processor's standard card fees still apply." },
+  { q: "Does INF-LINK take a cut of my sales?", a: "No. INF-LINK charges 0% transaction fees on every plan. Your payment processor's standard card fees still apply." },
   { q: "Can I sell coaching and courses on the same page?", a: "Yes. Mix any of the six product types on one store: downloads, bookings, courses, memberships, lead magnets and links." },
   { q: "Can I cancel anytime?", a: "Yes. Cancel from your settings in one click. Your store stays live until the end of your billing period." },
 ];
@@ -314,13 +314,13 @@ export default async function Home() {
             <p className="text-sm font-semibold text-brand-600">Simpler stack</p>
             <h2 className="mt-2 font-display text-4xl font-semibold tracking-tight">Stop paying for five tools that don&apos;t talk to each other</h2>
             <p className="mt-4 text-lg text-muted">
-              Every extra tool is another login, another fee and another place a buyer can drop off. Vitrine keeps the
+              Every extra tool is another login, another fee and another place a buyer can drop off. INF-LINK keeps the
               whole journey on one page.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div className="rounded-2xl border border-line p-6">
-              <p className="font-semibold text-muted">Without Vitrine</p>
+              <p className="font-semibold text-muted">Without INF-LINK</p>
               <ul className="mt-4 space-y-3">
                 {["Link page", "Booking calendar", "Checkout tool", "Course platform", "Email form"].map((t) => (
                   <li key={t} className="flex items-center gap-2 text-muted"><XMark size={15} className="text-rose-500" /> {t}</li>
@@ -328,7 +328,7 @@ export default async function Home() {
               </ul>
             </div>
             <div className="rounded-2xl border-2 border-brand-600 bg-brand-50/50 p-6">
-              <p className="font-semibold text-brand-700">With Vitrine</p>
+              <p className="font-semibold text-brand-700">With INF-LINK</p>
               <ul className="mt-4 space-y-3">
                 {["One link", "Built-in bookings", "Built-in checkout", "Built-in courses", "Built-in email list"].map((t) => (
                   <li key={t} className="flex items-center gap-2 font-medium"><Check size={15} className="text-brand-600" /> {t}</li>
@@ -348,7 +348,7 @@ export default async function Home() {
             <p className="mt-4 text-muted">Try any plan free for 14 days. No credit card needed to start.</p>
             <ul className="mt-6 space-y-2 text-sm text-muted">
               <li className="flex items-center gap-2"><Clock size={15} /> Cancel anytime in one click</li>
-              <li className="flex items-center gap-2"><Wallet size={15} /> 0% Vitrine fees on every plan</li>
+              <li className="flex items-center gap-2"><Wallet size={15} /> 0% INF-LINK fees on every plan</li>
             </ul>
           </div>
           <Pricing />
@@ -415,7 +415,7 @@ export default async function Home() {
           ))}
         </div>
         <div className="border-t border-line">
-          <p className="mx-auto max-w-6xl px-5 py-6 text-xs text-muted">© {new Date().getFullYear()} Vitrine. All rights reserved.</p>
+          <p className="mx-auto max-w-6xl px-5 py-6 text-xs text-muted">© {new Date().getFullYear()} INF-LINK. All rights reserved.</p>
         </div>
       </footer>
     </div>

@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 export function ClaimForm({ dark = false }: { dark?: boolean }) {
   return (
     <form action="/signup" className={`flex w-full max-w-md items-center rounded-xl border p-1.5 shadow-sm ${dark ? "border-white/15 bg-white/5" : "border-line bg-white"}`}>
-      <label htmlFor={dark ? "claim-dark" : "claim"} className={`pl-3 text-sm ${dark ? "text-neutral-400" : "text-muted"}`}>vitrine.app/</label>
+      <label htmlFor={dark ? "claim-dark" : "claim"} className={`pl-3 text-sm ${dark ? "text-neutral-400" : "text-muted"}`}>inf.link/</label>
       <input
         id={dark ? "claim-dark" : "claim"}
         name="username"

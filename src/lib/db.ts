@@ -82,7 +82,7 @@ function seed(): DB {
   const userId = randomUUID();
   const user: User = {
     id: userId,
-    email: "demo@vitrine.app",
+    email: "demo@inf.link",
     passwordHash: hashPassword("demo1234"),
     username: "demo",
     name: "Maya Laurent",

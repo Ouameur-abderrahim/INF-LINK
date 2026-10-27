@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Vitrine design system — cobalt accent on cool neutrals; display = Bricolage Grotesque, body = Geist.
+/* INF-LINK design system — cobalt accent on cool neutrals; display = Bricolage Grotesque, body = Geist.
    Layout idea: left-aligned editorial hero, bento feature grid, calm data-dense dashboard. */
 @theme inline {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;

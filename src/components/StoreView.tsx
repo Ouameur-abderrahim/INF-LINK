@@ -119,7 +119,7 @@ export function StoreView({ user, products, live = false }: { user: StoreUser; p
 
       {live && (
         <p className="mt-10 text-center text-xs" style={{ color: theme.muted }}>
-          <Link href="/" className="hover:underline">Made with Vitrine</Link>
+          <Link href="/" className="hover:underline">Made with INF-LINK</Link>
         </p>
       )}
     </div>
