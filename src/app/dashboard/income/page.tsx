@@ -1,9 +1,10 @@
+import { Receipt, TrendingUp, Wallet, ShoppingBag } from "lucide-react";
+import { ProductIconTile } from "@/components/icons";
 import { BarChart } from "@/components/BarChart";
 import { Stat } from "@/components/Stat";
 import { requireUser } from "@/lib/auth";
 import { readDB } from "@/lib/db";
 import { money, shortDate } from "@/lib/format";
-import { PRODUCT_TYPES } from "@/lib/types";
 import { daily, since } from "@/lib/stats";
 
 export default async function IncomePage() {
@@ -17,12 +18,12 @@ export default async function IncomePage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <h1 className="text-2xl font-bold">Income</h1>
+      <h1 className="font-display text-3xl font-semibold tracking-tight">Income</h1>
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat label="All-time revenue" value={money(total)} />
-        <Stat label="Last 30 days" value={money(last30)} />
-        <Stat label="Paid orders" value={String(paid.length)} />
-        <Stat label="Avg. order value" value={money(paid.length ? total / paid.length : 0)} />
+        <Stat label="All-time revenue" value={money(total)} icon={Wallet} />
+        <Stat label="Last 30 days" value={money(last30)} icon={TrendingUp} />
+        <Stat label="Paid orders" value={String(paid.length)} icon={ShoppingBag} />
+        <Stat label="Avg. order value" value={money(paid.length ? total / paid.length : 0)} icon={Receipt} />
       </div>
       <div className="card">
         <h2 className="mb-6 font-semibold">Daily revenue (last 30 days)</h2>
@@ -50,10 +51,15 @@ export default async function IncomePage() {
                   <p className="text-neutral-500">{o.buyerEmail}</p>
                 </td>
                 <td className="px-6 py-3">
-                  {PRODUCT_TYPES[o.type].icon} {o.productTitle}
-                  {o.booking && <span className="ml-2 text-xs text-violet-700">{o.booking.date} {o.booking.time}</span>}
+                  <div className="flex items-center gap-3">
+                    <ProductIconTile type={o.type} size={32} />
+                    <div>
+                      <p className="font-medium">{o.productTitle}</p>
+                      {o.booking && <p className="text-xs text-brand-700">{o.booking.date} · {o.booking.time}</p>}
+                    </div>
+                  </div>
                 </td>
-                <td className="px-6 py-3 text-right font-semibold">{o.amount ? money(o.amount) : "Free"}</td>
+                <td className="tabular px-6 py-3 text-right font-semibold">{o.amount ? money(o.amount) : "Free"}</td>
               </tr>
             ))}
           </tbody>

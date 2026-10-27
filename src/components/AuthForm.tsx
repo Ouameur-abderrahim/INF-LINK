@@ -16,7 +16,7 @@ export function AuthForm({ mode, defaultUsername = "" }: { mode: "login" | "sign
           </div>
           <div>
             <label className="label" htmlFor="username">Your store link</label>
-            <div className="flex items-center rounded-xl border border-neutral-200 focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
+            <div className="flex items-center rounded-lg border border-line focus-within:border-brand-500 focus-within:ring-4 focus-within:ring-brand-100">
               <span className="pl-3.5 text-sm text-neutral-500">vitrine.app/</span>
               <input id="username" name="username" defaultValue={defaultUsername} className="w-full bg-transparent px-1 py-2.5 text-sm outline-none" required />
             </div>
@@ -37,9 +37,9 @@ export function AuthForm({ mode, defaultUsername = "" }: { mode: "login" | "sign
       </button>
       <p className="text-center text-sm text-neutral-600">
         {mode === "login" ? (
-          <>No account? <Link href="/signup" className="font-semibold text-violet-600">Sign up</Link></>
+          <>No account? <Link href="/signup" className="font-semibold text-brand-700">Sign up</Link></>
         ) : (
-          <>Already have an account? <Link href="/login" className="font-semibold text-violet-600">Log in</Link></>
+          <>Already have an account? <Link href="/login" className="font-semibold text-brand-700">Log in</Link></>
         )}
       </p>
     </form>

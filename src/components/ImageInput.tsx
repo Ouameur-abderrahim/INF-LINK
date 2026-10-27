@@ -20,7 +20,7 @@ export function ImageInput({ value, onChange, round, max = 800 }: { value: strin
       <button
         type="button"
         onClick={() => ref.current?.click()}
-        className={`flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden border-2 border-dashed border-neutral-300 bg-neutral-50 text-2xl text-neutral-400 hover:border-violet-400 ${round ? "rounded-full" : "rounded-xl"}`}
+        className={`flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden border-2 border-dashed border-neutral-300 bg-neutral-50 text-2xl text-neutral-400 hover:border-brand-400 ${round ? "rounded-full" : "rounded-xl"}`}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         {value ? <img src={value} alt="" className="h-full w-full object-cover" /> : "+"}

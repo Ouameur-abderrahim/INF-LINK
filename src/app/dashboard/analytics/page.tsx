@@ -1,9 +1,10 @@
+import { Eye, MousePointerClick, Percent, Target } from "lucide-react";
+import { ProductIconTile } from "@/components/icons";
 import { BarChart } from "@/components/BarChart";
 import { Stat } from "@/components/Stat";
 import { requireUser } from "@/lib/auth";
 import { readDB } from "@/lib/db";
 import { money } from "@/lib/format";
-import { PRODUCT_TYPES } from "@/lib/types";
 import { daily, since, summary } from "@/lib/stats";
 
 export default async function AnalyticsPage() {
@@ -23,18 +24,18 @@ export default async function AnalyticsPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Analytics</h1>
+        <h1 className="font-display text-3xl font-semibold tracking-tight">Analytics</h1>
         <p className="text-sm text-neutral-500">Last 30 days</p>
       </div>
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Stat label="Store visits" value={String(s.views)} />
-        <Stat label="Product clicks" value={String(s.clicks)} />
-        <Stat label="Click-through rate" value={`${s.views ? ((s.clicks / s.views) * 100).toFixed(1) : "0.0"}%`} />
-        <Stat label="Visit → sale" value={`${s.conversion.toFixed(1)}%`} />
+        <Stat label="Store visits" value={s.views.toLocaleString()} icon={Eye} />
+        <Stat label="Product clicks" value={String(s.clicks)} icon={MousePointerClick} />
+        <Stat label="Click-through rate" value={`${s.views ? ((s.clicks / s.views) * 100).toFixed(1) : "0.0"}%`} icon={Percent} />
+        <Stat label="Visit → sale" value={`${s.conversion.toFixed(1)}%`} icon={Target} />
       </div>
       <div className="card">
         <h2 className="mb-6 font-semibold">Store visits</h2>
-        <BarChart data={daily(events.filter((e) => e.kind === "view"), 30, () => 1)} unit="visits" color="#0ea5e9" />
+        <BarChart data={daily(events.filter((e) => e.kind === "view"), 30, () => 1)} unit="visits" color="#0e1220" />
       </div>
       <div className="card overflow-x-auto p-0">
         <table className="w-full text-sm">
@@ -50,7 +51,7 @@ export default async function AnalyticsPage() {
           <tbody className="divide-y divide-neutral-100">
             {rows.map(({ p, clicks, sales, revenue }) => (
               <tr key={p.id}>
-                <td className="px-6 py-3 font-medium">{PRODUCT_TYPES[p.type].icon} {p.title}</td>
+                <td className="px-6 py-3 font-medium"><div className="flex items-center gap-3"><ProductIconTile type={p.type} size={32} />{p.title}</div></td>
                 <td className="px-6 py-3 text-right">{clicks}</td>
                 <td className="px-6 py-3 text-right">{p.type === "link" ? "—" : sales}</td>
                 <td className="px-6 py-3 text-right">{p.type === "link" || !clicks ? "—" : `${((sales / clicks) * 100).toFixed(0)}%`}</td>

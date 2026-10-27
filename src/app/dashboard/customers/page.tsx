@@ -1,3 +1,5 @@
+import { Download } from "lucide-react";
+import { Avatar } from "@/components/StoreView";
 import { requireUser } from "@/lib/auth";
 import { readDB } from "@/lib/db";
 import { money, shortDate } from "@/lib/format";
@@ -20,10 +22,10 @@ export default async function CustomersPage() {
     <div className="mx-auto max-w-6xl space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Customers</h1>
+          <h1 className="font-display text-3xl font-semibold tracking-tight">Customers</h1>
           <p className="text-sm text-neutral-500">{customers.length} contacts, including email subscribers from lead magnets.</p>
         </div>
-        <a href="/api/customers.csv" className="btn-ghost">Export CSV</a>
+        <a href="/api/customers.csv" className="btn-ghost"><Download size={16} /> Export CSV</a>
       </div>
       <div className="card overflow-x-auto p-0">
         <table className="w-full text-sm">
@@ -43,7 +45,7 @@ export default async function CustomersPage() {
             )}
             {customers.map((c) => (
               <tr key={c.email} className="hover:bg-neutral-50">
-                <td className="px-6 py-3 font-medium">{c.name}</td>
+                <td className="px-6 py-3 font-medium"><div className="flex items-center gap-3"><Avatar name={c.name} src="" size={32} />{c.name}</div></td>
                 <td className="px-6 py-3 text-neutral-600">{c.email}</td>
                 <td className="px-6 py-3">
                   <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${c.lead ? "bg-amber-50 text-amber-700" : "bg-green-50 text-green-700"}`}>

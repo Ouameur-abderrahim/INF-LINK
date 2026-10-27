@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowLeft, Plus } from "lucide-react";
+import { ProductIconTile } from "./icons";
 import { useState, useTransition } from "react";
 import { saveProduct, type ProductInput } from "@/app/actions";
 import type { Product, PublicUser } from "@/lib/types";
@@ -53,8 +55,9 @@ export function ProductEditor({ product, user }: { product: Product; user: Publi
         }}
       >
         <div className="flex items-center gap-3">
-          <Link href="/dashboard/store" className="text-neutral-400 hover:text-neutral-900">←</Link>
-          <h1 className="text-2xl font-bold">{isNew ? "New" : "Edit"} {meta.label}</h1>
+          <Link href="/dashboard/store" className="rounded-lg p-1.5 text-neutral-400 hover:bg-white hover:text-ink"><ArrowLeft size={20} /></Link>
+          <ProductIconTile type={p.type} size={36} />
+          <h1 className="font-display text-2xl font-semibold tracking-tight">{isNew ? "New" : "Edit"} {meta.label}</h1>
         </div>
 
         <section className="card space-y-5">
@@ -153,7 +156,7 @@ export function ProductEditor({ product, user }: { product: Product; user: Publi
                             days: on ? p.availability.days.filter((x) => x !== i) : [...p.availability.days, i].sort(),
                           })
                         }
-                        className={`rounded-lg px-3 py-1.5 text-sm font-medium ${on ? "bg-violet-600 text-white" : "bg-neutral-100 text-neutral-600"}`}
+                        className={`rounded-lg px-3 py-1.5 text-sm font-medium ${on ? "bg-brand-600 text-white" : "bg-neutral-100 text-neutral-600"}`}
                       >
                         {d}
                       </button>
@@ -177,13 +180,13 @@ export function ProductEditor({ product, user }: { product: Product; user: Publi
                   <textarea className="input min-h-20" placeholder="Lesson notes" value={l.content} onChange={(e) => set("lessons", p.lessons.map((x, j) => (j === i ? { ...x, content: e.target.value } : x)))} />
                 </div>
               ))}
-              <button type="button" className="btn-ghost" onClick={() => set("lessons", [...p.lessons, { title: "", content: "", videoUrl: "" }])}>+ Add lesson</button>
+              <button type="button" className="btn-ghost" onClick={() => set("lessons", [...p.lessons, { title: "", content: "", videoUrl: "" }])}><Plus size={16} /> Add lesson</button>
             </div>
           )}
         </section>
 
         <label className="flex items-center gap-3 text-sm font-medium">
-          <input type="checkbox" checked={p.published} onChange={(e) => set("published", e.target.checked)} className="h-4 w-4 accent-violet-600" />
+          <input type="checkbox" checked={p.published} onChange={(e) => set("published", e.target.checked)} className="h-4 w-4 accent-brand-600" />
           Show on my store
         </label>
 

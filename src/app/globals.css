@@ -1,30 +1,86 @@
 @import "tailwindcss";
 
+/* Vitrine design system — cobalt accent on cool neutrals; display = Bricolage Grotesque, body = Geist.
+   Layout idea: left-aligned editorial hero, bento feature grid, calm data-dense dashboard. */
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-bricolage), var(--font-geist-sans), ui-sans-serif, sans-serif;
 }
 
+@theme {
+  --color-ink: #0e1220;
+  --color-paper: #f5f6f8;
+  --color-line: #e3e6ec;
+  --color-muted: #5e6578;
+  --color-signal: #ff6a3d;
+  --color-brand-50: #eef1ff;
+  --color-brand-100: #dde3ff;
+  --color-brand-200: #bcc8ff;
+  --color-brand-300: #93a5ff;
+  --color-brand-400: #6680ff;
+  --color-brand-500: #3f5bff;
+  --color-brand-600: #2a44f0;
+  --color-brand-700: #2236c4;
+  --color-brand-800: #1f2f9c;
+  --color-brand-900: #1e2b7a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 body {
   background: #ffffff;
-  color: #171717;
+  color: var(--color-ink);
+}
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @utility input {
-  @apply w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-sm outline-none transition focus:border-violet-500 focus:ring-4 focus:ring-violet-100;
+  @apply w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-sm outline-none transition placeholder:text-neutral-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-100;
 }
 @utility label {
-  @apply mb-1.5 block text-sm font-medium text-neutral-700;
+  @apply mb-1.5 block text-sm font-medium text-ink;
 }
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition disabled:opacity-50;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition disabled:opacity-50;
 }
 @utility btn-primary {
-  @apply btn bg-violet-600 text-white hover:bg-violet-700;
+  @apply btn bg-brand-600 text-white shadow-sm shadow-brand-600/20 hover:bg-brand-700;
+}
+@utility btn-dark {
+  @apply btn bg-ink text-white hover:bg-neutral-800;
 }
 @utility btn-ghost {
-  @apply btn border border-neutral-200 bg-white text-neutral-800 hover:bg-neutral-50;
+  @apply btn border border-line bg-white text-ink hover:bg-paper;
 }
 @utility card {
-  @apply rounded-2xl border border-neutral-200 bg-white p-6;
+  @apply rounded-2xl border border-line bg-white p-6;
+}
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@utility animate-float {
+  animation: float 5s ease-in-out infinite;
 }

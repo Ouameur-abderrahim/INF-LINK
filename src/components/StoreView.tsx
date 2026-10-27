@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Product, PublicUser } from "@/lib/types";
 import { PRODUCT_TYPES } from "@/lib/types";
+import { ProductIcon, SOCIAL_ICONS } from "./icons";
 import { getTheme } from "@/lib/themes";
 import { initials, priceLabel } from "@/lib/format";
 
@@ -13,7 +14,6 @@ const SOCIAL_URLS: Record<string, (h: string) => string> = {
   x: (h) => `https://x.com/${h}`,
   website: (h) => (h.startsWith("http") ? h : `https://${h}`),
 };
-const SOCIAL_LABELS: Record<string, string> = { instagram: "IG", tiktok: "TT", youtube: "YT", x: "X", website: "🌐" };
 
 export function Avatar({ name, src, size = 96, ring }: { name: string; src: string; size?: number; ring?: string }) {
   return src ? (
@@ -21,7 +21,7 @@ export function Avatar({ name, src, size = 96, ring }: { name: string; src: stri
     <img src={src} alt={name} width={size} height={size} className="rounded-full object-cover" style={{ width: size, height: size, boxShadow: ring ? `0 0 0 4px ${ring}` : undefined }} />
   ) : (
     <div
-      className="flex items-center justify-center rounded-full bg-gradient-to-br from-fuchsia-400 to-indigo-500 font-bold text-white"
+      className="flex items-center justify-center rounded-full bg-gradient-to-br from-brand-400 to-brand-700 font-bold text-white"
       style={{ width: size, height: size, fontSize: size / 2.6, boxShadow: ring ? `0 0 0 4px ${ring}` : undefined }}
     >
       {initials(name) || "?"}
@@ -34,8 +34,8 @@ export function ProductThumb({ product, size = 64 }: { product: Pick<Product, "i
     // eslint-disable-next-line @next/next/no-img-element
     <img src={product.image} alt={product.title} className="shrink-0 rounded-xl object-cover" style={{ width: size, height: size }} />
   ) : (
-    <div className="flex shrink-0 items-center justify-center rounded-xl bg-black/5" style={{ width: size, height: size, fontSize: size / 2.2 }}>
-      {PRODUCT_TYPES[product.type].icon}
+    <div className="flex shrink-0 items-center justify-center rounded-xl bg-black/5" style={{ width: size, height: size }}>
+      <ProductIcon type={product.type} size={size * 0.42} />
     </div>
   );
 }
@@ -76,23 +76,27 @@ export function StoreView({ user, products, live = false }: { user: StoreUser; p
     <div className="min-h-full px-5 pb-10 pt-10" style={{ background: theme.bg, color: theme.text }}>
       <div className="mx-auto flex max-w-md flex-col items-center text-center">
         <Avatar name={user.name} src={user.avatar} ring={theme.card} />
-        <h1 className="mt-4 text-2xl font-bold">{user.name || "Your Name"}</h1>
+        <h1 className="mt-4 font-display text-2xl font-bold">{user.name || "Your Name"}</h1>
         <p className="text-sm" style={{ color: theme.muted }}>@{user.username}</p>
         {user.bio && <p className="mt-3 whitespace-pre-line text-sm leading-relaxed">{user.bio}</p>}
         {socials.length > 0 && (
           <div className="mt-4 flex gap-2">
-            {socials.map(([k, v]) => (
+            {socials.map(([k, v]) => {
+              const Icon = SOCIAL_ICONS[k]!;
+              return (
               <a
                 key={k}
                 href={live ? SOCIAL_URLS[k]!(v) : undefined}
                 target="_blank"
                 rel="noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold"
+                aria-label={k}
+                className="flex h-9 w-9 items-center justify-center rounded-full shadow-sm transition hover:scale-105"
                 style={{ background: theme.card, color: theme.text }}
               >
-                {SOCIAL_LABELS[k]}
+                <Icon size={16} />
               </a>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

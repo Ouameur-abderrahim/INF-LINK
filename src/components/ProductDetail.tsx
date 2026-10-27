@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowLeft, BookOpen, Clock, Lock } from "lucide-react";
 import { useActionState, useMemo, useState } from "react";
 import { checkout } from "@/app/actions";
 import type { Product, PublicUser } from "@/lib/types";
@@ -8,6 +9,7 @@ import { PRODUCT_TYPES } from "@/lib/types";
 import { getTheme } from "@/lib/themes";
 import { priceLabel } from "@/lib/format";
 import { Avatar } from "./StoreView";
+import { ProductIcon } from "./icons";
 
 type Props = {
   product: Product;
@@ -65,11 +67,11 @@ export function ProductDetail({ product, user, live = false, booked = [] }: Prop
       <div className="mx-auto max-w-md px-5 pt-6">
         {live ? (
           <Link href={`/${user.username}`} className="flex items-center gap-2 text-sm" style={{ color: theme.muted }}>
-            ← <Avatar name={user.name} src={user.avatar} size={24} /> {user.name}
+            <ArrowLeft size={16} /> <Avatar name={user.name} src={user.avatar} size={24} /> {user.name}
           </Link>
         ) : (
           <div className="flex items-center gap-2 pt-4 text-sm" style={{ color: theme.muted }}>
-            ← <Avatar name={user.name} src={user.avatar} size={24} /> {user.name}
+            <ArrowLeft size={16} /> <Avatar name={user.name} src={user.avatar} size={24} /> {user.name}
           </div>
         )}
 
@@ -78,17 +80,17 @@ export function ProductDetail({ product, user, live = false, booked = [] }: Prop
             // eslint-disable-next-line @next/next/no-img-element
             <img src={product.image} alt={product.title} className="aspect-video w-full object-cover" />
           ) : (
-            <div className="flex aspect-video items-center justify-center text-6xl" style={{ background: `${theme.accent}18` }}>
-              {PRODUCT_TYPES[product.type].icon}
+            <div className="flex aspect-video items-center justify-center" style={{ background: `${theme.accent}18`, color: theme.accent }}>
+              <ProductIcon type={product.type} size={56} strokeWidth={1.25} />
             </div>
           )}
           <div className="p-5">
             <h1 className="text-xl font-bold">{product.title || "Untitled product"}</h1>
             {product.subtitle && <p className="mt-1 text-sm" style={{ color: theme.muted }}>{product.subtitle}</p>}
             <p className="mt-3 text-2xl font-extrabold" style={{ color: theme.accent }}>{priceLabel(product.price, product.type)}</p>
-            {product.type === "coaching" && <p className="mt-1 text-xs" style={{ color: theme.muted }}>⏱ {product.duration}-minute video call</p>}
+            {product.type === "coaching" && <p className="mt-2 flex items-center gap-1.5 text-xs" style={{ color: theme.muted }}><Clock size={13} /> {product.duration}-minute video call</p>}
             {product.type === "course" && product.lessons.length > 0 && (
-              <p className="mt-1 text-xs" style={{ color: theme.muted }}>📚 {product.lessons.length} lessons · lifetime access</p>
+              <p className="mt-2 flex items-center gap-1.5 text-xs" style={{ color: theme.muted }}><BookOpen size={13} /> {product.lessons.length} lessons · lifetime access</p>
             )}
             {product.description && <p className="mt-4 whitespace-pre-line text-sm leading-relaxed">{product.description}</p>}
             {product.type === "course" && product.lessons.length > 0 && (
@@ -149,7 +151,7 @@ export function ProductDetail({ product, user, live = false, booked = [] }: Prop
           {!free && (
             <div className="space-y-1">
               <input name="card" inputMode="numeric" placeholder="Card number  4242 4242 4242 4242" className={inputCls} style={inputStyle} required={live} />
-              <p className="text-[11px]" style={{ color: theme.muted }}>🔒 Test mode: no real charge is made.</p>
+              <p className="flex items-center gap-1 text-[11px]" style={{ color: theme.muted }}><Lock size={11} /> Test mode: no real charge is made.</p>
             </div>
           )}
           {state?.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>}

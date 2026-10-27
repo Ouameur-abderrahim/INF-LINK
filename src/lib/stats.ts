@@ -31,3 +31,17 @@ export function summary(orders: Order[], events: TrackEvent[]) {
   const clicks = events.filter((e) => e.kind === "click").length;
   return { revenue, sales: orders.length, views, clicks, conversion: views ? (orders.length / views) * 100 : 0 };
 }
+
+/** Items in the window [days*2, days) ago — the period before `since(items, days)`. */
+export function previous<T extends { createdAt: string }>(items: T[], days: number) {
+  const end = Date.now() - days * 86400000;
+  const start = end - days * 86400000;
+  return items.filter((x) => {
+    const t = new Date(x.createdAt).getTime();
+    return t >= start && t < end;
+  });
+}
+
+export function pctChange(now: number, before: number) {
+  return before ? ((now - before) / before) * 100 : null;
+}
