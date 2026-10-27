@@ -1,12 +1,22 @@
 import "server-only";
-import { promises as fs } from "fs";
-import path from "path";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { randomUUID, randomBytes, scryptSync } from "crypto";
 import type { DB, Product, User, PublicUser } from "./types";
 
-const DB_PATH = path.join(process.cwd(), "data", "db.json");
+/*
+ * Storage: Cloudflare D1 (SQLite). Each collection is a table of JSON documents
+ * (id, data). readDB() loads everything; mutate() diffs the in-memory copy and
+ * writes only the rows that changed. Fine for a single creator platform at
+ * small scale; move hot paths (events, orders) to real columns + queries as it grows.
+ */
 
-let cache: DB | null = null;
+const TABLES = ["users", "products", "orders", "events", "sessions"] as const;
+type Table = (typeof TABLES)[number];
+type Row = { id?: string; token?: string };
+
+const rowKey = (table: Table, row: Row) => (table === "sessions" ? row.token! : row.id!);
+
+let schemaReady: Promise<void> | null = null;
 let queue: Promise<unknown> = Promise.resolve();
 
 export function hashPassword(password: string) {
@@ -14,35 +24,66 @@ export function hashPassword(password: string) {
   return `${salt}:${scryptSync(password, salt, 64).toString("hex")}`;
 }
 
-async function load(): Promise<DB> {
-  if (cache) return cache;
-  try {
-    cache = JSON.parse(await fs.readFile(DB_PATH, "utf8")) as DB;
-  } catch {
-    cache = seed();
-    await persist(cache);
-  }
-  return cache;
+async function d1() {
+  return (await getCloudflareContext({ async: true })).env.DB;
 }
 
-async function persist(db: DB) {
-  await fs.mkdir(path.dirname(DB_PATH), { recursive: true });
-  const tmp = `${DB_PATH}.tmp`;
-  await fs.writeFile(tmp, JSON.stringify(db, null, 2));
-  await fs.rename(tmp, DB_PATH);
+async function runChunked(db: D1Database, stmts: D1PreparedStatement[]) {
+  for (let i = 0; i < stmts.length; i += 50) await db.batch(stmts.slice(i, i + 50));
+}
+
+function upserts(db: D1Database, data: DB) {
+  return TABLES.flatMap((t) =>
+    (data[t] as Row[]).map((row) =>
+      db.prepare(`INSERT OR REPLACE INTO ${t} (id, data) VALUES (?, ?)`).bind(rowKey(t, row), JSON.stringify(row)),
+    ),
+  );
+}
+
+async function ensureSchema(db: D1Database) {
+  await db.batch(TABLES.map((t) => db.prepare(`CREATE TABLE IF NOT EXISTS ${t} (id TEXT PRIMARY KEY, data TEXT NOT NULL)`)));
+  const row = await db.prepare("SELECT COUNT(*) AS n FROM users").first<{ n: number }>();
+  if (!row?.n) await runChunked(db, upserts(db, seed()));
+}
+
+async function load(): Promise<{ db: D1Database; data: DB }> {
+  const db = await d1();
+  schemaReady ??= ensureSchema(db).catch((e) => {
+    schemaReady = null;
+    throw e;
+  });
+  await schemaReady;
+  const results = await db.batch(TABLES.map((t) => db.prepare(`SELECT data FROM ${t}`)));
+  const data = Object.fromEntries(
+    TABLES.map((t, i) => [t, (results[i]!.results as { data: string }[]).map((r) => JSON.parse(r.data))]),
+  ) as DB;
+  return { db, data };
 }
 
 export async function readDB(): Promise<DB> {
   await queue;
-  return load();
+  return (await load()).data;
 }
 
-/** Serialized read-modify-write so concurrent requests never clobber each other. */
+/** Read-modify-write: runs `fn` on a fresh copy, then persists only changed/added/removed rows. */
 export function mutate<T>(fn: (db: DB) => T): Promise<T> {
   const run = queue.then(async () => {
-    const db = await load();
-    const result = fn(db);
-    await persist(db);
+    const { db, data } = await load();
+    const before = new Map(TABLES.map((t) => [t, new Map((data[t] as Row[]).map((r) => [rowKey(t, r), JSON.stringify(r)]))]));
+    const result = fn(data);
+    const stmts: D1PreparedStatement[] = [];
+    for (const t of TABLES) {
+      const prev = before.get(t)!;
+      const seen = new Set<string>();
+      for (const row of data[t] as Row[]) {
+        const k = rowKey(t, row);
+        const json = JSON.stringify(row);
+        seen.add(k);
+        if (prev.get(k) !== json) stmts.push(db.prepare(`INSERT OR REPLACE INTO ${t} (id, data) VALUES (?, ?)`).bind(k, json));
+      }
+      for (const k of prev.keys()) if (!seen.has(k)) stmts.push(db.prepare(`DELETE FROM ${t} WHERE id = ?`).bind(k));
+    }
+    await runChunked(db, stmts);
     return result;
   });
   queue = run.catch(() => {});
@@ -79,7 +120,7 @@ export function newProduct(userId: string, partial: Partial<Product>): Product {
 }
 
 function seed(): DB {
-  const userId = randomUUID();
+  const userId = "demo-user";
   const user: User = {
     id: userId,
     email: "demo@inf.link",
@@ -103,6 +144,7 @@ function seed(): DB {
       price: 9900,
       duration: 45,
       buttonLabel: "Book a call",
+      id: "demo-p0",
       position: 0,
     }),
     newProduct(userId, {
@@ -114,6 +156,7 @@ function seed(): DB {
       price: 2900,
       url: "https://example.com/workout-guide.pdf",
       buttonLabel: "Get the guide",
+      id: "demo-p1",
       position: 1,
     }),
     newProduct(userId, {
@@ -128,6 +171,7 @@ function seed(): DB {
         { title: "The 5 movement patterns", content: "Squat, hinge, push, pull, carry.", videoUrl: "" },
         { title: "Building your weekly split", content: "How to plan 3 sessions per week.", videoUrl: "" },
       ],
+      id: "demo-p2",
       position: 2,
     }),
     newProduct(userId, {
@@ -137,6 +181,7 @@ function seed(): DB {
       price: 0,
       url: "https://example.com/breakfasts.pdf",
       buttonLabel: "Send it to me",
+      id: "demo-p3",
       position: 3,
     }),
     newProduct(userId, {
@@ -144,6 +189,7 @@ function seed(): DB {
       title: "Watch my latest YouTube video",
       url: "https://youtube.com",
       buttonLabel: "Watch",
+      id: "demo-p4",
       position: 4,
     }),
   ];

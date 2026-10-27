@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 const nextConfig: NextConfig = {
   turbopack: {
@@ -16,3 +17,6 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+// Exposes Cloudflare bindings (local D1) to `next dev`.
+initOpenNextCloudflareForDev();
